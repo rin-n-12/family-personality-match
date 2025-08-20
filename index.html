@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>親子の特性相性診断 - Family Personality Match</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-icon {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- ヘッダー -->
+    <header class="gradient-bg text-white py-6 px-4">
+        <div class="container mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-center">
+                <i class="fas fa-heart pulse-icon mr-3"></i>
+                親子の特性相性診断
+            </h1>
+            <p class="text-center mt-2 text-lg opacity-90">科学的アプローチで親子の関係性を可視化</p>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- スタート画面 -->
+        <div id="startScreen" class="max-w-4xl mx-auto fade-in">
+            <div class="bg-white rounded-2xl card-shadow p-8">
+                <div class="text-center mb-8">
+                    <i class="fas fa-users text-6xl text-purple-600 mb-4"></i>
+                    <h2 class="text-2xl font-bold mb-4">親子の特性を理解して、より良い関係を築きましょう</h2>
+                    <p class="text-gray-600 mb-6">
+                        この診断は、ビッグファイブ理論をベースにした性格特性診断です。<br>
+                        親子それぞれの特性を分析し、相性や関わり方のアドバイスを提供します。
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-3 text-purple-800">
+                            <i class="fas fa-chart-radar mr-2"></i>
+                            診断でわかること
+                        </h3>
+                        <ul class="text-sm text-gray-700 space-y-2">
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>5つの性格特性を可視化</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>親子の特性の共通点と相違点</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>効果的なコミュニケーション方法</li>
+                            <li><i class="fas fa-check text-green-500 mr-2"></i>子育てのアドバイス</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-50 to-green-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-3 text-blue-800">
+                            <i class="fas fa-clock mr-2"></i>
+                            所要時間
+                        </h3>
+                        <p class="text-sm text-gray-700 mb-3">約10〜15分（親子それぞれ）</p>
+                        <h3 class="font-bold text-lg mb-3 text-blue-800">
+                            <i class="fas fa-brain mr-2"></i>
+                            科学的根拠
+                        </h3>
+                        <p class="text-sm text-gray-700">ビッグファイブ理論に基づく性格診断</p>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="startDiagnosis()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all transform hover:scale-105">
+                        <i class="fas fa-play mr-2"></i>
+                        診断を開始する
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 診断者選択画面 -->
+        <div id="selectPersonScreen" class="max-w-4xl mx-auto fade-in hidden">
+            <div class="bg-white rounded-2xl card-shadow p-8">
+                <h2 class="text-2xl font-bold text-center mb-8">誰の診断を行いますか？</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <button onclick="selectPerson('mother')" class="p-6 bg-pink-50 hover:bg-pink-100 rounded-xl transition-all transform hover:scale-105">
+                        <i class="fas fa-female text-4xl text-pink-600 mb-3"></i>
+                        <h3 class="font-bold text-lg">母親</h3>
+                        <p class="text-sm text-gray-600 mt-2">お母さんの性格診断</p>
+                    </button>
+                    
+                    <button onclick="selectPerson('father')" class="p-6 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all transform hover:scale-105">
+                        <i class="fas fa-male text-4xl text-blue-600 mb-3"></i>
+                        <h3 class="font-bold text-lg">父親</h3>
+                        <p class="text-sm text-gray-600 mt-2">お父さんの性格診断</p>
+                    </button>
+                    
+                    <button onclick="selectPerson('child')" class="p-6 bg-green-50 hover:bg-green-100 rounded-xl transition-all transform hover:scale-105">
+                        <i class="fas fa-child text-4xl text-green-600 mb-3"></i>
+                        <h3 class="font-bold text-lg">子ども</h3>
+                        <p class="text-sm text-gray-600 mt-2">お子さんの性格診断</p>
+                    </button>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="showStartScreen()" class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-arrow-left mr-2"></i>戻る
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 診断画面 -->
+        <div id="questionScreen" class="max-w-4xl mx-auto fade-in hidden">
+            <div class="bg-white rounded-2xl card-shadow p-8">
+                <!-- プログレスバー -->
+                <div class="mb-6">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span id="currentPersonLabel"></span>
+                        <span><span id="currentQuestionNum">1</span> / <span id="totalQuestions">20</span></span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div id="progressBar" class="bg-purple-600 h-3 rounded-full transition-all duration-300" style="width: 5%"></div>
+                    </div>
+                </div>
+
+                <!-- 質問エリア -->
+                <div id="questionArea" class="mb-8">
+                    <h3 id="questionText" class="text-xl font-bold mb-6"></h3>
+                    
+                    <div class="space-y-3">
+                        <button onclick="answerQuestion(5)" class="w-full p-4 text-left bg-gray-50 hover:bg-purple-50 rounded-lg transition-all border-2 border-transparent hover:border-purple-300">
+                            <span class="font-semibold text-purple-700">とてもそう思う</span>
+                        </button>
+                        <button onclick="answerQuestion(4)" class="w-full p-4 text-left bg-gray-50 hover:bg-purple-50 rounded-lg transition-all border-2 border-transparent hover:border-purple-300">
+                            <span class="font-semibold text-purple-600">そう思う</span>
+                        </button>
+                        <button onclick="answerQuestion(3)" class="w-full p-4 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-all border-2 border-transparent hover:border-gray-300">
+                            <span class="font-semibold text-gray-600">どちらでもない</span>
+                        </button>
+                        <button onclick="answerQuestion(2)" class="w-full p-4 text-left bg-gray-50 hover:bg-blue-50 rounded-lg transition-all border-2 border-transparent hover:border-blue-300">
+                            <span class="font-semibold text-blue-600">そう思わない</span>
+                        </button>
+                        <button onclick="answerQuestion(1)" class="w-full p-4 text-left bg-gray-50 hover:bg-blue-50 rounded-lg transition-all border-2 border-transparent hover:border-blue-300">
+                            <span class="font-semibold text-blue-700">全くそう思わない</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="previousQuestion()" id="prevButton" class="text-gray-600 hover:text-gray-800 mr-4 disabled:opacity-50" disabled>
+                        <i class="fas fa-arrow-left mr-2"></i>前の質問
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 結果画面 -->
+        <div id="resultScreen" class="max-w-6xl mx-auto fade-in hidden">
+            <div class="bg-white rounded-2xl card-shadow p-8">
+                <h2 class="text-3xl font-bold text-center mb-8">
+                    <i class="fas fa-chart-line mr-3 text-purple-600"></i>
+                    診断結果
+                </h2>
+
+                <!-- レーダーチャート -->
+                <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4 text-center">性格特性チャート</h3>
+                        <div style="height: 400px; position: relative;">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold mb-4">特性スコア詳細</h3>
+                        <div id="scoreDetails" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <!-- 相性分析 -->
+                <div id="compatibilityAnalysis" class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl mb-8 hidden">
+                    <h3 class="text-xl font-bold mb-4">
+                        <i class="fas fa-heart mr-2 text-pink-600"></i>
+                        親子の相性分析
+                    </h3>
+                    <div id="compatibilityContent"></div>
+                </div>
+
+                <!-- アドバイス -->
+                <div id="adviceSection" class="bg-gradient-to-br from-blue-50 to-green-50 p-6 rounded-xl mb-8">
+                    <h3 class="text-xl font-bold mb-4">
+                        <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
+                        アドバイス
+                    </h3>
+                    <div id="adviceContent"></div>
+                </div>
+
+                <!-- アクションボタン -->
+                <div class="text-center space-x-4">
+                    <button onclick="continueDiagnosis()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        他の家族も診断する
+                    </button>
+                    <button onclick="downloadResult()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                        <i class="fas fa-download mr-2"></i>
+                        結果を保存
+                    </button>
+                    <button onclick="resetAll()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-full transition-all">
+                        <i class="fas fa-redo mr-2"></i>
+                        最初から
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-gray-800 text-white py-6 px-4 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-sm">© 2024 親子の特性相性診断 | ビッグファイブ理論に基づく性格診断</p>
+            <p class="text-xs mt-2 text-gray-400">※この診断は参考情報であり、専門的な心理診断ではありません</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

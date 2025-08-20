@@ -1,0 +1,31 @@
+{
+  "name": "family-personality-match",
+  "version": "1.0.0",
+  "description": "親子の特性相性診断アプリ - ビッグファイブ理論に基づく性格診断",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/family-personality-match.git"
+  },
+  "keywords": [
+    "personality",
+    "big-five",
+    "family",
+    "assessment",
+    "psychology",
+    "parenting",
+    "japanese"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/family-personality-match/issues"
+  },
+  "homepage": "https://github.com/yourusername/family-personality-match#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}
